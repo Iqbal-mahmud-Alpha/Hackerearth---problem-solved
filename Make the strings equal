@@ -1,0 +1,154 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define faster         ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define mem(a,b)       memset(a,b,sizeof(a))
+#define ff first
+#define all(x)  (x.begin(),x.end())
+#define ss second
+#define pr pair<ll,ll>
+#define pb push_back
+#define gcd(a,b)   __gcd(a,b)
+#define lcm(a,b)    (a*(b/gcd(a,b)))
+#define mod  1000000007
+#define num 1000
+
+/**------- Char Chk----------*/
+bool is_lower(char ch)
+{
+    if(ch>='a' && ch<='z') return true;
+    return false;
+}
+bool is_upper(char ch)
+{
+    if(ch>='A' && ch<='Z') return true;
+    return false;
+}
+bool is_digit(char ch)
+{
+    if(ch>='0' && ch<='9') return true;
+    return false;
+}
+bool vowel(char ch)
+{
+    if(ch=='A' || ch=='E' || ch=='I' || ch=='O' || ch=='U' || ch=='Y')
+    {
+        return true;
+    }
+    else return false;
+}
+int merge(int arr[], int temp[], int left, int mid, int right)
+{
+    int inv_count = 0;
+
+    int i = left;
+    int j = mid;
+    int k = left;
+    while ((i <= mid - 1) && (j <= right))
+    {
+        if (arr[i] <= arr[j])
+            temp[k++] = arr[i++];
+        else
+        {
+            temp[k++] = arr[j++];
+
+            inv_count = inv_count + (mid - i);
+        }
+    }
+
+    while (i <= mid - 1)
+        temp[k++] = arr[i++];
+    while (j <= right)
+        temp[k++] = arr[j++];
+    for (i=left; i <= right; i++)
+        arr[i] = temp[i];
+
+    return inv_count;
+}
+int _mergeSort(int arr[], int temp[], int left, int right)
+{
+    int mid, inv_count = 0;
+    if (right > left)
+    {
+        mid = (right + left)/2;
+        inv_count  = _mergeSort(arr, temp, left, mid);
+        inv_count += _mergeSort(arr, temp, mid+1, right);
+
+        inv_count += merge(arr, temp, left, mid+1, right);
+    }
+
+    return inv_count;
+}
+
+int countSwaps(int arr[], int n)
+{
+    int temp[n];
+    return _mergeSort(arr, temp, 0, n - 1);
+}
+/**----data type----*/
+typedef long long int ll;
+typedef unsigned long long int llu;
+
+int main()
+{
+    int t,n;
+    string s1,s2;
+    cin>>t;
+    while(t--)
+    {
+        cin>>n;
+        cin>>s1>>s2;
+        int a1[n],a2[n];
+        map<char,int>m1;
+        map<char,int>m2;
+        for(int i=0; i<n; i++)
+        {
+            a1[i]=s1[i];
+            m1[s1[i]]++;
+        }
+        for(int i=0; i<n; i++)
+        {
+            a2[i]=s2[i];
+            m2[s2[i]]++;
+        }
+        int a=countSwaps(a1,n);
+        int b=countSwaps(a2,n);
+        sort(s1.begin(),s1.end());
+        sort(s2.begin(),s2.end());
+        int mx1=0,mx2=0;
+        for(auto i:m1)
+        {
+            if(i.ss>mx1)
+            {
+                mx1=i.ss;
+            }
+        }
+        for(auto i:m2)
+        {
+            if(i.ss>mx2)
+            {
+                mx2=i.ss;
+            }
+        }
+//        cout<<mx1<<' '<<mx2<<endl;
+        if(s1==s2)
+        {
+            if(mx1>1 or mx2>1)
+            {
+                cout<<"YES"<<endl;
+            }
+            else if(a%2==b%2)
+            {
+                cout<<"YES"<<endl;
+            }
+            else
+            {
+                cout<<"NO"<<endl;
+            }
+        }
+        else
+        {
+            cout<<"NO"<<endl;
+        }
+    }
+}
+
