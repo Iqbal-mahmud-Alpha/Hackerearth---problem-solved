@@ -1,0 +1,109 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define faster         ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define mem(a,b)       memset(a,b,sizeof(a))
+#define ff first
+#define all(x)  (x.begin(),x.end())
+#define ss second
+#define pr pair<ll,ll>
+#define pb push_back
+#define gcd(a,b)   __gcd(a,b)
+#define lcm(a,b)    (a*(b/gcd(a,b)))
+#define mod  1000000007
+#define num 1000
+
+/**------- Char Chk----------*/
+
+bool is_lower(char ch)
+{
+    if(ch>='a' && ch<='z') return true;
+    return false;
+}
+bool is_upper(char ch)
+{
+    if(ch>='A' && ch<='Z') return true;
+    return false;
+}
+bool is_digit(char ch)
+{
+    if(ch>='0' && ch<='9') return true;
+    return false;
+}
+bool vowel(char ch)
+{
+    if(ch=='A' || ch=='E' || ch=='I' || ch=='O' || ch=='U' || ch=='Y')
+    {
+        return true;
+    }
+    else return false;
+}
+/**----data type----*/
+
+typedef long long int ll;
+typedef unsigned long long int llu;
+
+string digit(ll n)
+{
+    string ans;
+    while(n)
+    {
+        int a=n%10;
+        if(a!=0)
+        {
+            ans+=to_string(a);
+        }
+        n/=10;
+    }
+    reverse(ans.begin(),ans.end());
+    return ans;
+}
+
+int main()
+{
+    int t,n;
+    string s1,s2;
+    cin>>t;
+    cin.ignore();
+    while(t--)
+    {
+        cin>>n;
+        cin>>s1>>s2;
+        map<char,int>m1;
+        map<char,int>m2;
+        set<char>st;
+        for(int i=0; i<n; i++)
+        {
+            m1[s1[i]]++;
+            st.insert(s1[i]);
+        }
+        for(int i=0; i<n; i++)
+        {
+            m2[s2[i]]++;
+            st.insert(s2[i]);
+        }
+
+        int sum=m1['?']+m2['?'];
+        int d=0;
+        for(auto i:st)
+        {
+            if(i!='?')
+            {
+                d+=abs(m2[i]-m1[i]);
+            }
+        }
+        if(d==0)
+        {
+            cout<<"YES"<<endl;
+        }
+        else if(d==sum)
+        {
+            cout<<"YES"<<endl;
+        }
+        else
+        {
+            cout<<"NO"<<endl;
+        }
+
+    }
+}
+
