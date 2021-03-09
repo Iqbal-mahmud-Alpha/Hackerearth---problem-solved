@@ -1,0 +1,136 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define faster  ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define ff first
+#define ss second
+#define pb push_back
+#define gcd(a, b) __gcd(a, b)
+#define lcm(a, b) (a * (b / gcd(a, b)))
+#define all(a) a.begin(), a.end()
+#define INF 1000000000
+#define mod 1000000007
+#define num 100005
+/**----data type----*/
+typedef long long int ll;
+typedef unsigned long long int llu;
+
+int arr[num];
+//even,odd;
+pair<int,int>p[num*4];
+
+void Tree(int node,int b,int e)///build a Segment tree
+{
+    if(b==e)
+    {
+        if(arr[b]%2==0)
+        {
+            p[node]= {1,0};
+        }
+        else p[node]= {0,1};
+        return;
+    }
+    int left=node*2;
+    int right=node*2+1;
+    int mid=(b+e)/2;
+    Tree(left,b,mid);
+    Tree(right,mid+1,e);
+    p[node].ff=p[left].ff+p[right].ff;
+    p[node].ss=p[left].ss+p[right].ss;
+}
+void update(int node, int b, int e, int i, int newvalue)/// Update a segment Tree
+{
+    if (i > e || i < b)
+        return;
+    if (b >= i && e <= i)
+    {
+        if(newvalue%2==0)
+        {
+            p[node]= {1,0};
+        }
+        else
+        {
+            p[node]= {0,1};
+        }
+        return;
+    }
+    int Left = node * 2;
+    int Right = node * 2 + 1;
+    int mid = (b + e) / 2;
+    update(Left, b, mid, i, newvalue);
+    update(Right, mid + 1, e, i, newvalue);
+    p[node].ff= p[Left].ff + p[Right].ff;
+    p[node].ss= p[Left].ss + p[Right].ss;
+}
+int queryEven(int node, int b, int e, int i, int j)/// Quarey a segment tree
+{
+    if (i > e || j < b)
+        return 0;
+    if (b >= i && e <= j)
+    {
+        return p[node].ff;
+    }
+    int Left = node * 2;
+    int Right = node * 2 + 1;
+    int mid = (b + e) / 2;
+    int p1 = queryEven(Left, b, mid, i, j);
+    int p2 = queryEven(Right, mid + 1, e, i, j);
+    return p1 + p2;
+}
+int queryOdd(int node, int b, int e, int i, int j)
+{
+    if (i > e || j < b)
+        return 0;
+    if (b >= i && e <= j)
+    {
+        return p[node].ss;
+    }
+    int Left = node * 2;
+    int Right = node * 2 + 1;
+    int mid = (b + e) / 2;
+    int p1 = queryOdd(Left, b, mid, i, j);
+    int p2 = queryOdd(Right, mid + 1, e, i, j);
+    return p1 + p2;
+}
+void Print(int n)
+{
+    for(int i=1; i<=n*3; i++)
+    {
+        cout<<p[i].ff<<' ';
+    }
+    cout<<endl;
+    for(int i=1; i<=n*3; i++)
+    {
+        cout<<p[i].ss<<' ';
+    }
+    cout<<endl;
+}
+int main()
+{
+    int n,c,l,r,q;
+    cin>>n;
+    for(int i=1; i<=n; i++)
+    {
+        cin>>arr[i];
+    }
+    Tree(1,1,n);
+    //Print(n);
+    cin>>q;
+    while(q--)
+    {
+        cin>>c>>l>>r;
+        if(c==0)
+        {
+            update(1,1,n,l,r);
+            //Print(n);
+        }
+        else if(c==1)
+        {
+            cout<<queryEven(1,1,n,l,r)<<endl;
+        }
+        else
+        {
+            cout<<queryOdd(1,1,n,l,r)<<endl;
+        }
+    }
+}
+
