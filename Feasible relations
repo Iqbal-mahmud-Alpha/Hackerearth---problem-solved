@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define faster            ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define ff                first
+#define ss                second
+#define pb                push_back
+#define pr                pair<ll,ll>
+#define mem(a,b)          memset(a,b,sizeof(a))
+#define gcd(a, b)         __gcd(a, b)
+#define lcm(a, b)         (a * (b / gcd(a, b)))
+#define all(a)            a.begin(), a.end()
+#define setbit(n)         __builtin_popcount(n);
+#define totalbit(n)       log2(n)+1
+#define lens(s)           s.size()
+#define lena(a)           sizeof(a)/sizeof(a[0])
+#define posation(x)       cout<<fixed<<setprecision(x)
+#define pi                3.141592653589793
+#define INF               1000000000
+#define mod               1000000007 //10^9+7;
+#define num               1000005
+
+/**----data type----*/
+typedef long long int ll;
+typedef unsigned long long int llu;
+
+vector<int>grp[num];
+int vis[num],cc[num],cc_cmp;
+
+void dfs(int node)
+{
+    vis[node]=1;
+    cc[node]=cc_cmp;
+    for(int child:grp[node])
+    {
+        if(vis[child]==0)
+        {
+            dfs(child);
+        }
+    }
+}
+int main()
+{
+    faster
+    int tc,n,e,x,y,k;
+    cin>>tc;
+    while(tc--)
+    {
+        cin>>n>>k;
+        string s;
+        vector<pr>vec;
+        for(int i=1; i<=n; i++)grp[i].clear(),vis[i]=0;
+        for(int i=1; i<=k; i++)
+        {
+            cin>>x>>s>>y;
+            if(s=="=")
+            {
+                grp[x].pb(y);
+                grp[y].pb(x);
+            }
+            else
+            {
+                vec.pb({x,y});
+            }
+        }
+        cc_cmp=0;
+        for(int i=1; i<=n; i++)
+        {
+            if(vis[i]==0)
+            {
+                cc_cmp++;
+                dfs(i);
+            }
+        }
+        int flag=0;
+        for(int i=0; i<vec.size(); i++)
+        {
+            int f=vec[i].ff;
+            int s=vec[i].ss;
+            if(cc[f]==cc[s])
+            {
+                flag=1;
+                break;
+            }
+        }
+        cout<<((flag==0)?"YES":"NO")<<endl;
+    }
+}
