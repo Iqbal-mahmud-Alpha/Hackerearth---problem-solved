@@ -1,0 +1,102 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define faster            ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define ff                first
+#define ss                second
+#define pb                push_back
+#define pr                pair<int,int>
+#define mem(a,b)          memset(a,b,sizeof(a))
+#define gcd(a, b)         __gcd(a, b)
+#define lcm(a, b)         (a * (b / gcd(a, b)))
+#define all(a)            a.begin(), a.end()
+#define setbit(n)         __builtin_popcount(n);
+#define totalbit(n)       log2(n)+1
+#define lens(s)           s.size()
+#define lena(a)           sizeof(a)/sizeof(a[0])
+#define posation(x)       cout<<fixed<<setprecision(x)
+#define pi                3.141592653589793
+#define INF               1000000000
+#define mod               1000000007 //10^9+7;
+#define num               1006
+
+/**----data type----*/
+typedef long long int ll;
+typedef unsigned long long int llu;
+
+int dx[]= {-1,0,1,0};
+int dy[]= {0,1,0,-1};
+
+int vis[num][num];
+int ar[num][num],dis[num][num];
+int n,m;
+
+bool is_valid(int x,int y)
+{
+    if(x<1 or x>n or y<1 or y>n)
+    {
+        return false;
+    }
+    if(vis[x][y]==1)return false;
+    return true;
+}
+void bfs(int sorX,int sorY)
+{
+    queue<pr>q;
+    q.push({sorX,sorY});
+    vis[sorX][sorY]=1;
+    dis[sorX][sorY]=0;
+    while(!q.empty())
+    {
+        int curx=q.front().ff;
+        int cury=q.front().ss;
+        q.pop();
+        for(int i=0; i<4; i++)
+        {
+            if(is_valid(curx+dx[i],cury+dy[i]))
+            {
+                int newx=curx+dx[i];
+                int newy=cury+dy[i];
+                q.push({newx,newy});
+                vis[newx][newy]=1;
+                dis[newx][newy]=dis[curx][cury]+1;
+            }
+        }
+    }
+//    cout<<"Dinstance array"<<endl;
+//    for(int i=1; i<=n; i++)
+//    {
+//        for(int j=1; j<=n; j++)
+//        {
+//            cout<<dis[i][j]<<' ';
+//        }
+//        cout<<endl;
+//    }
+}
+int main()
+{
+    int x,y,a,b;
+    cin>>n;
+    char ch;
+    for(int i=1; i<=n; i++)
+    {
+        for(int j=1; j<=n; j++)
+        {
+            cin>>ch;
+            if(ch=='S')
+            {
+                x=i,y=j;
+            }
+            if(ch=='E')
+            {
+                a=i,b=j;
+            }
+            if(ch=='T')
+            {
+                vis[i][j]=1;
+            }
+        }
+    }
+    bfs(x,y);
+    cout<<dis[a][b]<<endl;
+}
+
