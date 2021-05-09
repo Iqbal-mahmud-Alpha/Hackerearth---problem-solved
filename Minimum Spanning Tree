@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define faster            ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define ff                first
+#define ss                second
+#define pb                push_back
+#define pr                pair<int,int>
+#define mem(a,b)          memset(a,b,sizeof(a))
+#define gcd(a, b)         __gcd(a, b)
+#define lcm(a, b)         (a * (b / gcd(a, b)))
+#define all(a)            a.begin(), a.end()
+#define setbit(n)         __builtin_popcount(n);
+#define totalbit(n)       log2(n)+1
+#define lens(s)           s.size()
+#define lena(a)           sizeof(a)/sizeof(a[0])
+#define posation(x)       cout<<fixed<<setprecision(x)
+#define pi                3.141592653589793
+#define INF               1000000000
+#define mod               1000000007 //10^9+7;
+#define num               10006
+
+/**----data type----**/
+typedef long long int ll;
+typedef unsigned long long int llu;
+
+/**---Graph move---**/
+int dx[]= {-1, 0, 1,  0, -1, -1,  1, 1};
+int dy[]= { 0, 1, 0, -1, -1,  1, -1, 1};
+int kx[]= {-2,-1, 1, 2,  2,  1, -1, -2};
+int ky[]= { 1, 2, 2, 1, -1, -2, -2, -1};
+
+int par[num];
+
+struct test
+{
+    int x,y,w;
+    bool operator()(test i,test j)
+    {
+        return i.w<j.w;
+    }
+} alpha;
+
+int Find(int node)
+{
+    if(par[node]==node)
+    {
+        return node;
+    }
+    else return par[node]=Find(par[node]);
+}
+void Union(int a,int b)
+{
+    par[b]=a;
+}
+int main()
+{
+    int tc,a,b,w,n,m;
+    cin>>n>>m;
+    vector<test>v;
+    for(int i=1; i<=n; i++)
+    {
+        par[i]=i;
+    }
+    for(int i=1; i<=m; i++)
+    {
+        cin>>a>>b>>w;
+        v.pb({a,b,w});
+    }
+    sort(v.begin(),v.end(),alpha);
+    ll sum=0;
+    for(auto i:v)
+    {
+        a=i.x;
+        b=i.y;
+        w=i.w;
+        a=Find(a),b=Find(b);
+        if(a!=b)
+        {
+            Union(a,b);
+            sum+=w;
+        }
+    }
+    cout<<sum<<endl;
+
+}
